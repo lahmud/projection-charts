@@ -1,24 +1,40 @@
 $black: #000000;
-$gray: #6E6E6E;
+$gray: #6e6e6e;
 
-.container{
-    padding: 1.2rem 1rem;
+.container {
+  padding: 1.2rem 1rem;
+
+  .heading {
+    h1 {
+      margin: 0;
+    }
+    margin-bottom: 2rem;
+
+    border-bottom: 2px solid $black;
+  }
 }
 
 a {
-    display: inline-block;
-    padding: 0rem 1rem;
-    margin-right: 0.5rem;
-    color: $black;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: normal;
-    transition: all 0.2s;
-    border-bottom: 2px solid $black;
-    text-align: center;
+  display: inline-block;
+  padding: 0rem 1rem;
+  margin-right: 0.5rem;
+  color: $black;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: normal;
+  transition: all 0.2s;
+  border-bottom: 3px solid $black;
+  text-align: center;
 
-    &:hover{
-        color: $gray;
-        border-bottom: 3px solid $black;
-    }
+  &:hover {
+    color: $gray;
+    border-bottom: 3px solid $gray;
+  }
+
+  &.disabled {
+    color: $gray;
+    border-bottom: 1px dotted $gray;
+    pointer-events: none;
+    cursor: default;
+  }
 }
