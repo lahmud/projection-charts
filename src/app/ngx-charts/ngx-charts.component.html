@@ -25,10 +25,16 @@
       [xAxisLabel]="xAxisLabel"
       [yAxisLabel]="yAxisLabel"
       [timeline]="timeline"
-      [results]="multi"
-      (select)="onSelect($event)"
-      (activate)="onActivate($event)"
-      (deactivate)="onDeactivate($event)"
+      [results]="data"
+      [yScaleMin]="yScaleMin"
+      [roundDomains]="roundDomains"
+      [xScaleMax]="xScaleMax"
+      [xAxisTickFormatting]="xAxisTickFormatting"
+      [yAxisTickFormatting]="yAxisTickFormatting"
+      [rangeFillOpacity]="rangeFillOpacity"
+      [referenceLines]="referenceLines"
+      [showRefLines]="showRefLines"
+      [showRefLabels]="showRefLabels"
     >
     </ngx-charts-line-chart>
   </div>
@@ -40,7 +46,10 @@
       <div class="card-body">
         <h2 class="card-title">Pros:</h2>
         <ul class="card-text">
-          <li></li>
+          <li>Built for Angular</li>
+          <li>Min/max ranges for a given value</li>
+          <li>Integrated with Angular animations</li>
+          <li>Legend hover states on graph</li>
         </ul>
       </div>
     </div>
@@ -50,7 +59,8 @@
       <div class="card-body">
         <h2 class="card-title">Cons:</h2>
         <ul class="card-text">
-          <li></li>
+          <li>Customizing line formatting requires removing view encapsulation</li>
+          <li>No vertical reference lines</li>
         </ul>
       </div>
     </div>

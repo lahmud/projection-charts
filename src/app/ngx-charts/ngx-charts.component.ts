@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Series } from './../classes/series.class';
+import { DataModel } from './../classes/data-model.class';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import * as moment from 'moment';
+import { formatCurrency } from '@angular/common';
 
 @Component({
   selector: 'app-ngx-charts',
   templateUrl: './ngx-charts.component.html',
-  styleUrls: ['./ngx-charts.component.scss']
+  styleUrls: ['./ngx-charts.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class NgxChartsComponent implements OnInit {
 
@@ -15,92 +20,14 @@ export class NgxChartsComponent implements OnInit {
   endYear: number = 95;
   totalAccountValue: number = 450000;
   withdrawalAmount: number = 0;
-  maxXAxis: number = 120;
-
-  // Data sets
-  immediateWithdrawalReturnCase: number[] = [];
-  standardReturnCase: number[] = [];
-  worstReturnCase: number[] = [];
-  bestReturnCase: number[] = [];
-  noActionReturnCase: number[] = [];
-
+  maxXAxis: number = 110;
+  
   // Return rates
   bestReturnRate: number = 0.025;
   standardReturnRate: number = 0.02;
   worstReturnRate: number = 0.01;
 
-  multi: any[] = [
-    {
-      "name": "North Korea",
-      "series": [
-        {
-          "value": 3445,
-          "name": "2016-09-24T04:55:30.119Z",
-          "min": 3172,
-          "max": 3718
-        },
-        {
-          "value": 6149,
-          "name": "2016-09-14T17:42:33.680Z",
-          "min": 5606,
-          "max": 6692
-        },
-        {
-          "value": 4229,
-          "name": "2016-09-22T03:36:11.380Z",
-          "min": 4125,
-          "max": 4333
-        },
-        {
-          "value": 3266,
-          "name": "2016-09-15T08:33:37.593Z",
-          "min": 3007,
-          "max": 3525
-        },
-        {
-          "value": 2005,
-          "name": "2016-09-23T06:56:37.961Z",
-          "min": 1915,
-          "max": 2095
-        }
-      ]
-    },
-    {
-      "name": "Montenegro",
-      "series": [
-        {
-          "value": 4727,
-          "name": "2016-09-24T04:55:30.119Z",
-          "min": 4266,
-          "max": 5188
-        },
-        {
-          "value": 4264,
-          "name": "2016-09-14T17:42:33.680Z",
-          "min": 4099,
-          "max": 4429
-        },
-        {
-          "value": 6027,
-          "name": "2016-09-22T03:36:11.380Z",
-          "min": 5888,
-          "max": 6166
-        },
-        {
-          "value": 3781,
-          "name": "2016-09-15T08:33:37.593Z",
-          "min": 3689,
-          "max": 3873
-        },
-        {
-          "value": 3494,
-          "name": "2016-09-23T06:56:37.961Z",
-          "min": 3326,
-          "max": 3662
-        }
-      ]
-    }
-  ];
+  data: DataModel[] = [];
 
   // options
   legend: boolean = true;
@@ -110,31 +37,112 @@ export class NgxChartsComponent implements OnInit {
   yAxis: boolean = true;
   showYAxisLabel: boolean = true;
   showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Year';
-  yAxisLabel: string = 'Population';
-  timeline: boolean = true;
+  xAxisLabel: string = 'Age';
+  yAxisLabel: string = 'Account Value';
+  timeline: boolean = false;
+  yScaleMin: number = 0;
+  yScaleMax: number = 0;
+  xScaleMax: number = 0;
+  rangeFillOpacity: number = 0.1;
+  showRefLines: boolean = true;
+  showRefLabels: boolean = true;
+  roundDomains: boolean = false;
+  xAxisTickFormatting;
+  yAxisTickFormatting;
 
   colorScheme = {
-    domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
+    domain: ['#000000', '#507CA3', '#9900CC']
   };
 
-  constructor() {
-  }
-
   ngOnInit(): void {
-    // throw new Error("Method not implemented.");
+    this.generateData();
+    this.setMaxXScale();
+    this.xAxisTickFormatting = this.xAxisFormat.bind(this);
+    this.yAxisTickFormatting = this.yAxisFormat.bind(this);
   }
 
-  onSelect(data): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+  generateData() {
+    this.generateImmediateWithdrawal();
+    this.generateStandardCaseReturn();
+    this.generateNoActionCaseReturn();
   }
 
-  onActivate(data): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
+  setMaxXScale() {
+    this.xScaleMax = (this.maxXAxis - this.startYear) * 12;
   }
 
-  onDeactivate(data): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+  xAxisFormat(value) {
+    return (Math.floor(value / 12)) + this.startYear;
+  }
+
+  yAxisFormat(value) {
+    return formatCurrency(value, 'en', '$', 'USD');
+  }
+
+  // Becomes a linear depletion
+  generateImmediateWithdrawal() {
+    const immediateData = new DataModel("Immediate Withdrawal");
+    this.withdrawalAmount = this.totalAccountValue / (this.endYear - this.startYear) / this.months.length;
+    for (let i = 0; i <= (this.endYear - this.startYear) * this.months.length; i++) {
+      const val = this.totalAccountValue - (this.withdrawalAmount * i);
+      let series = new Series(i, val);
+      immediateData.series.push(series)
+    }
+    this.data.push(immediateData);
+  }
+
+  // Partial withdrawal scenario
+  generateStandardCaseReturn() {
+    const standardData = new DataModel("Standard Return");
+    for (let i = 0; i <= (this.maxXAxis - this.startYear) * this.months.length; i++) {
+      // First entry is what you start with
+      if (i === 0) {
+        let series = new Series(i, this.totalAccountValue, this.totalAccountValue, this.totalAccountValue);
+        standardData.series.push(series);
+        continue;
+      }
+      
+      // Stop populating if the last item was 0
+      if (standardData.series[i - 1].value === 0) {
+        break;
+      }
+      
+      // Get the slowly depleting value
+      let val = (standardData.series[i - 1].value - this.withdrawalAmount) * (1 + (this.standardReturnRate / this.months.length));
+      val = val >= 0 ? val : 0;
+
+      // Generate the +/- range
+      let minVal = (standardData.series[i - 1].min - this.withdrawalAmount) * (1 + (this.worstReturnRate / this.months.length));
+      let maxVal = (standardData.series[i - 1].max - this.withdrawalAmount) * (1 + (this.bestReturnRate / this.months.length));
+      
+      // Default the minVal to 0 if begnning to drop below
+      minVal = minVal < 0 ? 0 : minVal;
+
+      let series = new Series(i, val, minVal, maxVal);
+      standardData.series.push(series);
+    }
+    this.data.push(standardData);
+  }
+
+  // Exponentially increasing value
+  generateNoActionCaseReturn() {
+    const noActionData = new DataModel("No Action");
+    for (let i = 0; i <= (this.maxXAxis - this.startYear) * this.months.length; i++) {
+      // First entry is what you start with
+      if (i === 0) {
+        let series = new Series(i, this.totalAccountValue);
+        noActionData.series.push(series);
+        continue;
+      }
+
+      let val = noActionData.series[i - 1].value * (1 + (this.standardReturnRate / this.months.length));
+      val = val >= 0 ? val : 0;
+
+      let series = new Series(i, val);
+
+      noActionData.series.push(series);
+    }
+    this.data.push(noActionData);
   }
 
 }
