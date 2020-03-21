@@ -1,20 +1,58 @@
-<div class="container">
-    <h1>{{title}}</h1>
+<div class="row mb-4">
+  <div class="col">
+    <h1>{{ title }}</h1>
 
-    <p>I am starting with <strong>{{totalAccountValue | currency}}</strong>.</p>
-    <p>I am <strong>{{startYear}}</strong> and want money to last until I am <strong>{{endYear}}</strong> years old.</p>
-    <p>If I want to withdraw <strong>{{withdrawalAmount | currency}}</strong> per month...</p>
+    <p>
+      I am starting with <strong>{{ totalAccountValue | currency }}</strong
+      >.
+    </p>
+    <p>
+      I am <strong>{{ startYear }}</strong> and want money to last until I am
+      <strong>{{ endYear }}</strong> years old.
+    </p>
+    <p>
+      If I want to withdraw
+      <strong>{{ withdrawalAmount | currency }}</strong> per month...
+    </p>
 
-    <canvas id="myChart" width="800" height="500"></canvas>
+    <ngx-charts-line-chart
+      [scheme]="colorScheme"
+      [legend]="legend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxis]="xAxis"
+      [yAxis]="yAxis"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [timeline]="timeline"
+      [results]="multi"
+      (select)="onSelect($event)"
+      (activate)="onActivate($event)"
+      (deactivate)="onDeactivate($event)"
+    >
+    </ngx-charts-line-chart>
+  </div>
 </div>
 
-<div>
-    <h2>Pros:</h2>
-    <ul>
-        <li></li>
-    </ul>
-    <h2>Cons:</h2>
-    <ul>
-        <li></li>
-    </ul>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Pros:</h2>
+        <ul class="card-text">
+          <li></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Cons:</h2>
+        <ul class="card-text">
+          <li></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
