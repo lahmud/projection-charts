@@ -41,11 +41,8 @@ export class NgxChartsComponent implements OnInit {
   yAxisLabel: string = 'Account Value';
   timeline: boolean = false;
   yScaleMin: number = 0;
-  yScaleMax: number = 0;
   xScaleMax: number = 0;
   rangeFillOpacity: number = 0.1;
-  showRefLines: boolean = true;
-  showRefLabels: boolean = true;
   roundDomains: boolean = false;
   xAxisTickFormatting;
   yAxisTickFormatting;
