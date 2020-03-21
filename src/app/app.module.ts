@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ChartJsComponent } from './chart-js/chart-js/chart-js.component';
-import { NgxChartsComponent } from './ngx-charts/ngx-charts/ngx-charts.component';
+import { ChartJsComponent } from './chart-js/chart-js.component';
+import { NgxChartsComponent } from './ngx-charts/ngx-charts.component';
 
 @NgModule({
   declarations: [

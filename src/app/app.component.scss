@@ -23,7 +23,6 @@ a {
   text-transform: uppercase;
   font-weight: normal;
   transition: all 0.2s;
-  border-bottom: 3px solid $black;
   text-align: center;
 
   &:hover {
@@ -36,5 +35,9 @@ a {
     border-bottom: 1px dotted $gray;
     pointer-events: none;
     cursor: default;
+  }
+
+  &.active-link {
+    border-bottom: 3px solid $black;
   }
 }

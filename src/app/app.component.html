@@ -1,14 +1,18 @@
 <div class="container">
-  <div class="heading">
-    <h1>Purpose</h1>
-    <p>This project is to test out the various charting libraries to understand capabilities and speed of development.</p>
+  <div class="row>">
+    <div class="col">
+      <div class="heading">
+        <h1>Purpose</h1>
+        <p>This project is to test out the various charting libraries to understand capabilities and speed of development.</p>
+      </div>
+    
+      <div class="nav-container mb-4">
+        <a routerLinkActive="active-link" [routerLink]="['/chartjs']">ChartJS</a>
+        <a routerLinkActive="active-link" [routerLink]="['/ngx-charts']">ngx-charts</a>
+        <a routerLinkActive="active-link" class="disabled" [routerLink]="['/highcharts']">Highcharts (Coming Soon)</a>
+      </div>
+    
+      <router-outlet></router-outlet>
+    </div>
   </div>
-
-  <div class="nav-container">
-    <a [routerLink]="['/chartjs']">ChartJS</a>
-    <a class="disabled" [routerLink]="['']">Highcharts (TBD)</a>
-    <a class="disabled" [routerLink]="['']">ngx-charts (TBD)</a>
-  </div>
-
-  <router-outlet></router-outlet>
 </div>
